@@ -123,7 +123,7 @@ function elt(name, className) {
 }
 
 // **********
-// **** DOMDDisplay(parent, level)
+// **** DOMDisplay(parent, level)
 // **** parent -> the parent element to append to for generating this element
 // **** level -> the level object its a part of
 // **********
@@ -256,7 +256,7 @@ var maxStep = 0.05
 // Level.animate()
 // step is the time step in seconds
 // the keys object contains information about the arrow keys the player has press.
-Level.prototype.animate = function(step, keys) {
+Level.prototype.animate = function(step, keys, touch) {
   if (this.status != null)
     this.finishDelay -= step
 
@@ -264,7 +264,7 @@ Level.prototype.animate = function(step, keys) {
     var thisStep = Math.min(step, maxStep)
 
     this.actors.forEach(function(actor) {
-      actor.act(thisStep, this, keys)
+      actor.act(thisStep, this, keys, touch)
     }, this)
 
     step -= thisStep
@@ -334,9 +334,9 @@ Player.prototype.moveY = function(step, level, keys) {
   }
 }
 
-Player.prototype.act = function(step, level, keys) {
-  this.moveX(step, level, keys)
-  this.moveY(step, level, keys)
+Player.prototype.act = function(step, level, keys, touch) {
+  this.moveX(step, level, keys, touch)
+  this.moveY(step, level, keys, touch)
 
   var otherActor = level.actorAt(this)
   if (otherActor)
@@ -368,20 +368,6 @@ Level.prototype.playerTouched = function(type, actor) {
 
 var arrowCodes = {37: "left", 38: "up", 39: "right"}
 
-function trackKeys(codes) {
-  var pressed = Object.create(null)
-  function handler(event) {
-    if (codes.hasOwnProperty(event.keyCode)) {
-      var down = event.type == "keydown"
-      pressed[codes[event.keyCode]] = down
-      event.preventDefault()
-    }
-  }
-  addEventListener("keydown", handler)
-  addEventListener("keyup", handler)
-  return pressed
-}
-
 function runAnimation(frameFunc) {
   var lastTime = null
   function frame(time) {
@@ -398,12 +384,14 @@ function runAnimation(frameFunc) {
 }
 
 var arrows = trackKeys(arrowCodes)
+var playerPosXY
 
 function runLevel(level, Display, andThen) {
   var display = new Display(document.body, level)
   runAnimation(function(step) {
     level.animate(step, arrows)
     display.drawFrame(step)
+    playerPosXY = [level.player.pos.x, level.player.pos.y]
     if (level.isFinished()) {
       display.clear()
       if (andThen)
@@ -425,4 +413,55 @@ function runGame(plans, Display) {
     })
   }
   startLevel(0)
+}
+
+function trackKeys(codes) {
+  var pressed = Object.create(null)
+  function handler(event) {
+    if (codes.hasOwnProperty(event.keyCode)) {
+      var down = event.type == "keydown"
+      pressed[codes[event.keyCode]] = down
+      event.preventDefault()
+    }
+  }
+
+  // function handle_touchstart(ev) {
+  //   ev.preventDefault()
+  //   handle_touchmove(ev)
+  // }
+
+  function handle_touchstart(ev) {
+    var theTouch = ev.changedTouches[0];
+    var playerPosX = playerPosXY[0]
+    var playerPosY = playerPosXY[1]
+    var direction = (Math.round(playerPosX * scale) <= Math.floor((Number(theTouch.clientX).toFixed(0)))) ? 'right' : 'left'
+    var jumping = (Math.round(playerPosY * scale) > Math.floor((Number(theTouch.clientY).toFixed(0)))) ? 'up' : ''
+    console.log(playerPosXY)
+    console.log(theTouch)
+    console.log(jumping)
+    if (direction != null || jumping != null) {
+      var touchMoveX = event.type == "touchmove"
+      var touchMoveY = event.type == "touchmove"
+      pressed[direction] = touchMoveX
+      pressed[jumping] = touchMoveY
+      ev.preventDefault()
+    }
+  }
+  function handle_touchend(ev) {
+    pressed['up'] = ''
+    pressed['left'] = ''
+    pressed['right'] = ''
+    ev.preventDefault()
+  }
+  // Register keydown/up event handlers
+  addEventListener("keydown", handler)
+  addEventListener("keyup", handler)
+
+  // Register touch event handlers
+  // window.addEventListener('touchstart', handle_touchstart, { passive: false})
+  addEventListener('touchmove', handle_touchstart, { passive: false})
+  // window.addEventListener('touchcancel', process_touchcancel, false)
+  addEventListener('touchend', handle_touchend, { passive: false})
+
+  return pressed
 }
