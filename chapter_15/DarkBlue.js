@@ -425,17 +425,17 @@ function trackKeys(codes) {
     }
   }
 
-  // function handle_touchstart(ev) {
-  //   ev.preventDefault()
-  //   handle_touchmove(ev)
-  // }
-
   function handle_touchstart(ev) {
+    handle_touchmove(ev)
+    ev.preventDefault()
+  }
+
+  function handle_touchmove(ev) {
     var theTouch = ev.changedTouches[0];
     var playerPosX = playerPosXY[0]
-    var playerPosY = playerPosXY[1]
-    var direction = (Math.round(playerPosX * scale) <= Math.floor((Number(theTouch.clientX).toFixed(0)))) ? 'right' : 'left'
-    var jumping = (Math.round(playerPosY * scale) > Math.floor((Number(theTouch.clientY).toFixed(0)))) ? 'up' : ''
+    var playerPosY = Math.round(playerPosXY[1] + 0.5)
+    var direction = (Math.floor(playerPosX) <= theTouch.target.cellIndex) ? 'right' : 'left'
+    var jumping = (Math.round(playerPosY * scale) > Math.floor((Number(theTouch.clientY + 20).toFixed(0)))) ? 'up' : ''
     console.log(playerPosXY)
     console.log(theTouch)
     console.log(jumping)
@@ -447,18 +447,18 @@ function trackKeys(codes) {
       ev.preventDefault()
     }
   }
+
   function handle_touchend(ev) {
-    pressed['up'] = ''
-    pressed['left'] = ''
-    pressed['right'] = ''
+    for (var member in pressed) delete pressed[member]
     ev.preventDefault()
   }
+
   // Register keydown/up event handlers
   addEventListener("keydown", handler)
   addEventListener("keyup", handler)
 
   // Register touch event handlers
-  // window.addEventListener('touchstart', handle_touchstart, { passive: false})
+  addEventListener('touchstart', handle_touchstart, { passive: false})
   addEventListener('touchmove', handle_touchstart, { passive: false})
   // window.addEventListener('touchcancel', process_touchcancel, false)
   addEventListener('touchend', handle_touchend, { passive: false})
