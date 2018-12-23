@@ -460,7 +460,6 @@ function trackKeys(codes) {
   // Register touch event handlers
   addEventListener('touchstart', handle_touchstart, { passive: false})
   addEventListener('touchmove', handle_touchstart, { passive: false})
-  // window.addEventListener('touchcancel', process_touchcancel, false)
   addEventListener('touchend', handle_touchend, { passive: false})
 
   return pressed
