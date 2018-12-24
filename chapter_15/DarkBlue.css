@@ -1,6 +1,6 @@
 .background {
   background: rgb(52, 166, 251);
-  border-spacing: 0;
+  border-spacing: 0 !important;
 }
 .background td { padding: 0;                    }
 .lava          { background: rgb(255, 100, 100) }
@@ -19,8 +19,6 @@
 
 .game {
   overflow: hidden;
-  max-width: 600px;
-  max-height: 450px;
   position: relative;
   margin: 0 auto;
 }

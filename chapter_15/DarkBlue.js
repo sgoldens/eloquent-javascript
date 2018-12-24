@@ -436,14 +436,10 @@ function trackKeys(codes) {
     var playerPosY = Math.round(playerPosXY[1] + 0.5)
     var direction = (Math.floor(playerPosX) <= theTouch.target.cellIndex) ? 'right' : 'left'
     var jumping = (Math.round(playerPosY * scale) > Math.floor((Number(theTouch.clientY + 20).toFixed(0)))) ? 'up' : ''
-    console.log(playerPosXY)
-    console.log(theTouch)
-    console.log(jumping)
     if (direction != null || jumping != null) {
-      var touchMoveX = event.type == "touchmove"
-      var touchMoveY = event.type == "touchmove"
-      pressed[direction] = touchMoveX
-      pressed[jumping] = touchMoveY
+      var touchMove = event.type == "touchmove"
+      pressed[jumping] = touchMove
+      pressed[direction] = touchMove
       ev.preventDefault()
     }
   }
@@ -458,9 +454,9 @@ function trackKeys(codes) {
   addEventListener("keyup", handler)
 
   // Register touch event handlers
-  addEventListener('touchstart', handle_touchstart, { passive: false})
-  addEventListener('touchmove', handle_touchstart, { passive: false})
-  addEventListener('touchend', handle_touchend, { passive: false})
+  document.addEventListener('touchstart', handle_touchstart, { passive: false})
+  document.addEventListener('touchmove', handle_touchstart, { passive: false})
+  document.addEventListener('touchend', handle_touchend, { passive: false})
 
   return pressed
 }
