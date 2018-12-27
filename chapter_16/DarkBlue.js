@@ -332,10 +332,14 @@ Player.prototype.moveY = function(step, level, keys) {
   var obstacle = level.obstacleAt(newPos, this.size)
   if (obstacle) {
     level.playerTouched(obstacle)
-    if (keys.up && this.speed.y > 0)
+    if (keys.up && this.speed.y > 0) {
       this.speed.y = -jumpSpeed
-    else
+      let audio = new Audio('https://freesound.org/data/previews/270/270318_5123851-lq.mp3')
+      audio.volume = 0.1
+      audio.play()
+    } else {
       this.speed.y = 0
+    }
   } else {
     this.pos = newPos
   }
@@ -358,6 +362,9 @@ Player.prototype.act = function(step, level, keys, touch) {
 
 Level.prototype.playerTouched = function(type, actor) {
   if (type == "lava" && this.status == null) {
+    let audio = new Audio("https://freesound.org/data/previews/414/414209_6938106-lq.mp3")
+    audio.volume = 0.6
+    audio.play()
     this.status = "lost"
     this.finishDelay = 1
   } else if (type == "coin") {
@@ -365,6 +372,9 @@ Level.prototype.playerTouched = function(type, actor) {
       return other != actor
     })
     if (!this.actors.some(function(actor) {
+      let audio = new Audio("https://freesound.org/data/previews/135/135936_2487914-lq.mp3")
+      audio.volume = 0.2
+      audio.play()
       return actor.type == "coin"
     })) {
       this.status = "won"
@@ -490,8 +500,8 @@ function CanvasDisplay(parent, level) {
   this.instructions = elt("div", "instructions")
   this.coinsLeft = elt("span", "scoreboard-inner-text")
   this.controlsDisplay = elt("span", "controls-display")
-  this.canvas.width = Math.min(450, level.width * scale)
-  this.canvas.height = Math.min(338, level.height * scale)
+  this.canvas.width = Math.min(552, level.width * scale)
+  this.canvas.height = Math.min(414, level.height * scale)
   parent.appendChild(this.scoreboard)
   parent.appendChild(this.canvas)
   parent.appendChild(this.instructions)

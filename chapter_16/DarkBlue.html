@@ -14,8 +14,6 @@
     runGame(GAME_LEVELS, CanvasDisplay, () => {
       while (document.body.hasOwnProperty("vsc-initialized")) {
         let audioLoop = document.createElement("audio")
-        let audioLoopEl = document.createElement("audioLoopEl")
-        let audioLoopElEl = document.getElementById('audioLoop')
         audioLoop.currentTime = 0
         audioLoop.autoplay = true
       }
