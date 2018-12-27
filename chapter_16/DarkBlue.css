@@ -49,5 +49,18 @@ canvas {
   color: yellow !important;
   width: 100%;
   text-align: center;
+}
 
+.controls-display {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+  font-size: 22px;
+  color: #fffacdc7;
+}
+
+.controls-display {
+  opacity: 1;
+  transition: 1s opacity;
 }

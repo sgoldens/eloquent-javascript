@@ -483,13 +483,31 @@ function flipHorizontally(context, around) {
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas")
   this.scoreboard = elt("div", "scoreboard")
+  this.instructions = elt("div", "instructions")
   this.coinsLeft = elt("span", "scoreboard-inner-text")
+  this.controlsDisplay = elt("span", "controls-display")
   this.canvas.width = Math.min(450, level.width * scale)
   this.canvas.height = Math.min(338, level.height * scale)
   parent.appendChild(this.scoreboard)
   parent.appendChild(this.canvas)
+  parent.appendChild(this.instructions)
   this.scoreboard.appendChild(this.coinsLeft)
+  this.instructions.appendChild(this.controlsDisplay)
   this.cx = this.canvas.getContext("2d")
+  let controlsDisplay = document.getElementsByClassName("controls-display")
+  if (controlsDisplay[0]) {
+    controlsDisplay[0].innerHTML = `Keyboard: A or ⬅︎, W or ⬆︎, D or ➡︎`
+    controlsDisplay[0].innerHTML +=  '<br />'
+    controlsDisplay[0].innerHTML += `Touchscreen: touch/hold down around the player`
+    window.onload = () => {
+      window.setTimeout(fadeout, 5000)
+    }
+
+    fadeout = () => {
+      controlsDisplay[0].style.opacity = '0'
+    }
+  }
+
 
   this.level = level
 
