@@ -434,7 +434,7 @@ function trackKeys(codes) {
     var theTouch = ev.changedTouches[0];
     var playerPosX = playerPosXY[0]
     var playerPosY = Math.round(playerPosXY[1] + 0.5)
-    var xBehind = Math.floor(theTouch.clientX + (newViewLeft * scale))
+    var xBehind = Math.floor(theTouch.clientX + ((newViewLeft * scale) - (document.getElementsByTagName('canvas')[0].getBoundingClientRect().x)))
     var yAbove = Math.floor(theTouch.clientY + (newViewTop * scale))
     var direction = ((Math.floor(playerPosX) * 20) <= xBehind)  ? 'right' : 'left'
     var jumping = (Math.round(playerPosY * scale) > yAbove + 15) ? 'up' : ''
@@ -475,8 +475,8 @@ function flipHorizontally(context, around) {
 
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas")
-  this.canvas.width = Math.min(window.visualViewport.width, level.width * scale)
-  this.canvas.height = Math.min(window.visualViewport.width * 0.75, level.height * scale)
+  this.canvas.width = Math.min(450, level.width * scale)
+  this.canvas.height = Math.min(338, level.height * scale)
   parent.appendChild(this.canvas)
   this.cx = this.canvas.getContext("2d")
 
