@@ -1,5 +1,7 @@
 // Notes taken from readings of "Eloquent JavaScript, Second Edition", by Marijn Haverbeke, Chapter 15, "Project: A Platform Game"
 
+let totalCoins
+
 function Level(plan) {
   this.width = plan[0].length
   this.height = plan.length
@@ -26,6 +28,7 @@ function Level(plan) {
     return actor.type == "player"
   })[0]
   this.status = this.finishDelay = null
+  totalCoins = this.actors.filter(obj => obj.type == "coin").length
 }
 
 // Check for game completion
@@ -475,9 +478,14 @@ function flipHorizontally(context, around) {
 
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas")
+  this.scoreboard = elt("div", "scoreboard")
+  this.scoreboard.textContent = "Coins Left"
+  this.coinsLeft = elt("span", "scoreboard-inner-text")
   this.canvas.width = Math.min(450, level.width * scale)
   this.canvas.height = Math.min(338, level.height * scale)
+  parent.appendChild(this.scoreboard)
   parent.appendChild(this.canvas)
+  this.scoreboard.appendChild(this.coinsLeft)
   this.cx = this.canvas.getContext("2d")
 
   this.level = level
@@ -507,7 +515,7 @@ CanvasDisplay.prototype.drawFrame = function(step) {
   this.drawActors()
 }
 
-var newViewLeft, newViewTop
+var newViewLeft, newViewTop, coinsLeft
 
 CanvasDisplay.prototype.updateViewport = function() {
   var view = this.viewport, margin = view.width / 3
@@ -515,6 +523,12 @@ CanvasDisplay.prototype.updateViewport = function() {
   var center = player.pos.plus(player.size.times(0.5))
   newViewLeft  = this.viewport.left
   newViewTop = this.viewport.top
+  coinsLeft = this.level.actors.filter(obj => obj.type == "coin").length
+  let scoreboardCoins = document.getElementsByClassName("scoreboard-inner-text")
+  let difference = (a, b) => { return Math.abs(a - b) }
+  if (scoreboardCoins[0]) {
+    scoreboardCoins[0].textContent = `Coins: ${difference(totalCoins , coinsLeft)}/${totalCoins}`
+  }
 
   if (center.x - 10 < view.left + margin)
     view.left = Math.max(center.x - 3 - margin, 0)

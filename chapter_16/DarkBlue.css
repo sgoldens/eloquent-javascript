@@ -34,3 +34,19 @@ canvas {
   display: block;
   margin: 0 auto;
 }
+
+.scoreboard {
+  width: 100%;
+  position: relative;
+  height: 0px;
+  display: flex;
+}
+
+.scoreboard-inner-text {
+  position: absolute;
+  font-size: 23px;
+  color: yellow;
+  width: 100%;
+  text-align: center;
+
+}
