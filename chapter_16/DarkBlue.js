@@ -412,7 +412,7 @@ function runGame(plans, Display) {
         console.log("You win!")
     })
   }
-  startLevel(1)
+  startLevel(0)
 }
 
 function trackKeys(codes) {
@@ -438,7 +438,6 @@ function trackKeys(codes) {
     var yAbove = Math.floor(theTouch.clientY + (newViewTop * scale))
     var direction = ((Math.floor(playerPosX) * 20) <= xBehind)  ? 'right' : 'left'
     var jumping = (Math.round(playerPosY * scale) > yAbove + 15) ? 'up' : ''
-    debugger
 
     if (direction != null || jumping != null) {
       var touchMove = event.type == "touchmove"
@@ -476,8 +475,8 @@ function flipHorizontally(context, around) {
 
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas")
-  this.canvas.width = Math.min(600, level.width * scale)
-  this.canvas.height = Math.min(450, level.height * scale)
+  this.canvas.width = Math.min(window.innerWidth, level.width * scale)
+  this.canvas.height = Math.min(window.innerWidth * 0.75, level.height * scale)
   parent.appendChild(this.canvas)
   this.cx = this.canvas.getContext("2d")
 
@@ -596,12 +595,12 @@ CanvasDisplay.prototype.drawActors = function() {
   this.level.actors.forEach(function(actor) {
     var width = actor.size.x * scale
     var height = actor.size.y * scale
-    var x = (actor.pos.x - this.viewport.left) * scale
+    var x = Math.floor((actor.pos.x - this.viewport.left) * scale)
     var y = (actor.pos.y - this.viewport.top) * scale
     if (actor.type == "player") {
       this.drawPlayer(x, y, width, height)
     } else {
-      var tileX = (actor.type == "coin" ? 2 : 1) * scale
+      var tileX = (actor.type == "coin" ? 2 : 0) * scale
       this.cx.drawImage(otherSprites,
                         tileX, 0, width, height,
                         x,     y, width, height)
