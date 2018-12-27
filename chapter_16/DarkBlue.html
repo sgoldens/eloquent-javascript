@@ -11,7 +11,7 @@
   <audio autoplay loop src="http://soundimage.org/wp-content/uploads/2016/01/Lost-Jungle_Looping.mp3"></audio>
   <script>
     runGame(GAME_LEVELS, CanvasDisplay)
-    if (runGame) {
+    while (document.body.hasOwnProperty("vsc-initialized")) {
       let audioLoop = document.createElement("audio")
       let audioLoopEl = document.createElement("audioLoopEl")
       let audioLoopElEl = document.getElementById('audioLoop')
