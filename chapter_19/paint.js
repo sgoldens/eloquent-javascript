@@ -23,7 +23,7 @@ elt = (name, attributes, ...theArgs) => {
 let controls = Object.create(null)
 
 createPaint = parent => {
-  let canvas = elt("canvas", {width: 600, height: 400})
+  let canvas = elt("canvas", {width: 450, height: 338})
   let cx = canvas.getContext("2d")
   let toolbar = elt("div", {class: "toolbar"})
   for (var name in controls) {
