@@ -3,10 +3,16 @@
   width: -moz-fit-content;
   width: -ms-fit-content;
   width: fit-content;
-  border: 2px solid silver;
+  border: 8px solid silver;
   overflow: auto;
   position: relative;
-  margin: 20px;
+  margin: 20px auto;
+  background-color: #ffffff;
 }
 .picturepanel canvas { display: block; }
-.toolbar > * { margin-right: 5px; }
+.toolbar > * { position: relative; margin: 0 auto; }
+.toolbar { text-align: center; }
+
+html {
+  background-color: #eeeeee;
+}
