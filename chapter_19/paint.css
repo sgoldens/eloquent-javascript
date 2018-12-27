@@ -9,4 +9,4 @@
   margin: 20px;
 }
 .picturepanel canvas { display: block; }
-.toolbar > * { margin: 20px; }
+.toolbar > * { margin-right: 5px; }
