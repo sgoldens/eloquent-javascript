@@ -114,6 +114,10 @@ Coin.prototype.type = "coin"
 
 // console.log(simpleLevel.width, "by", simpleLevel.height)
 
+// the number of pixels a single square element unit takes up
+var scale = 20
+
+
 // **********
 // **** elt(name, className)
 // **** name -> the element's tag name
@@ -126,99 +130,98 @@ function elt(name, className) {
   return elt
 }
 
+// Chapter 16 - DOMDisplay version of drawing the game onto the page
+
 // **********
 // **** DOMDisplay(parent, level)
 // **** parent -> the parent element to append to for generating this element
 // **** level -> the level object its a part of
 // **********
-function DOMDisplay(parent, level) {
-  // Create and store the wrapper element returned by .appendChild()
-  this.wrap = parent.appendChild(elt("div", "game"))
-  this.level = level
+// function DOMDisplay(parent, level) {
+//   // Create and store the wrapper element returned by .appendChild()
+//   this.wrap = parent.appendChild(elt("div", "game"))
+//   this.level = level
 
-  // the background is only drawn once, so we set it here
-  this.wrap.appendChild(this.drawBackground())
-  // user by the drawFrame() to track the element that holds the actors
-  this.actorLayer = null
-  this.drawFrame()
-}
+//   // the background is only drawn once, so we set it here
+//   this.wrap.appendChild(this.drawBackground())
+//   // user by the drawFrame() to track the element that holds the actors
+//   this.actorLayer = null
+//   this.drawFrame()
+// }
 
-// the number of pixels a single square element unit takes up
-var scale = 20
-
-DOMDisplay.prototype.drawBackground = function() {
-  var table = elt("table", "background")
-  table.style.width = this.level.width * scale + "px"
-  this.level.grid.forEach(function(row) {
-    var rowElt = table.appendChild(elt("tr"))
-    rowElt.style.height = scale + "px"
-    row.forEach(function(type) {
-      rowElt.appendChild(elt("td", type))
-    })
-  })
-  return table
-}
+// DOMDisplay.prototype.drawBackground = function() {
+//   var table = elt("table", "background")
+//   table.style.width = this.level.width * scale + "px"
+//   this.level.grid.forEach(function(row) {
+//     var rowElt = table.appendChild(elt("tr"))
+//     rowElt.style.height = scale + "px"
+//     row.forEach(function(type) {
+//       rowElt.appendChild(elt("td", type))
+//     })
+//   })
+//   return table
+// }
 
 
-// Draw each actor and scale it up from game units to pixels size.
-DOMDisplay.prototype.drawActors = function() {
-  var wrap = elt("div")
-  this.level.actors.forEach(function(actor) {
-    var rect = wrap.appendChild(elt("div", "actor " + actor.type))
-    rect.style.width = actor.size.x * scale + "px"
-    rect.style.height = actor.size.y * scale + "px"
-    rect.style.left = actor.pos.x * scale + "px"
-    rect.style.top = actor.pos.y * scale + "px"
-  })
-  return wrap
-}
+// // Draw each actor and scale it up from game units to pixels size.
+// DOMDisplay.prototype.drawActors = function() {
+//   var wrap = elt("div")
+//   this.level.actors.forEach(function(actor) {
+//     var rect = wrap.appendChild(elt("div", "actor " + actor.type))
+//     rect.style.width = actor.size.x * scale + "px"
+//     rect.style.height = actor.size.y * scale + "px"
+//     rect.style.left = actor.pos.x * scale + "px"
+//     rect.style.top = actor.pos.y * scale + "px"
+//   })
+//   return wrap
+// }
 
-// Since there are only a few game objects to draw, we forgo reusing them
-// and that ways need of information flow associating DOM elements and actors.
-// We redraw the actor elements each frame, simplifying the drawing code.
-DOMDisplay.prototype.drawFrame = function() {
-  if (this.actorLayer)
-    this.wrap.removeChild(this.actorLayer)
-  this.actorLayer = this.wrap.appendChild(this.drawActors())
-  this.wrap.className = "game " + (this.level.status || "")
-  this.scrollPlayerIntoView()
-}
+// // Since there are only a few game objects to draw, we forgo reusing them
+// // and that ways need of information flow associating DOM elements and actors.
+// // We redraw the actor elements each frame, simplifying the drawing code.
+// DOMDisplay.prototype.drawFrame = function() {
+//   if (this.actorLayer)
+//     this.wrap.removeChild(this.actorLayer)
+//   this.actorLayer = this.wrap.appendChild(this.drawActors())
+//   this.wrap.className = "game " + (this.level.status || "")
+//   this.scrollPlayerIntoView()
+// }
 
 
-// Find the player's position and update the wrapping element's scroll position
-// when the player is too close to the edge.
-DOMDisplay.prototype.scrollPlayerIntoView = function() {
-  var width = this.wrap.clientWidth
-  var height = this.wrap.clientHeight
-  var margin = width / 3
+// // Find the player's position and update the wrapping element's scroll position
+// // when the player is too close to the edge.
+// DOMDisplay.prototype.scrollPlayerIntoView = function() {
+//   var width = this.wrap.clientWidth
+//   var height = this.wrap.clientHeight
+//   var margin = width / 3
 
-  // The viewport
-  var left = this.wrap.scrollLeft, right = left + width
-  var top = this.wrap.scrollTop, bottom = top + height
+//   // The viewport
+//   var left = this.wrap.scrollLeft, right = left + width
+//   var top = this.wrap.scrollTop, bottom = top + height
 
-  var player = this.level.player
-  var center = player.pos.plus(player.size.times(0.5))
-                 .times(scale)
+//   var player = this.level.player
+//   var center = player.pos.plus(player.size.times(0.5))
+//                  .times(scale)
 
-  // Verify the player position isn't outside of the allowed range.
-  if (center.x < left + margin) {
-    this.wrap.scrollLeft = center.x - margin
-  } else if (center.x > right - margin) {
-    this.wrap.scrollLeft = center.x + margin - width
-  }
+//   // Verify the player position isn't outside of the allowed range.
+//   if (center.x < left + margin) {
+//     this.wrap.scrollLeft = center.x - margin
+//   } else if (center.x > right - margin) {
+//     this.wrap.scrollLeft = center.x + margin - width
+//   }
 
-  if (center.y < top + margin) {
-    this.wrap.scrollTop = center.y - margin
-  } else if (center.y > bottom - margin) {
-    this.wrap.scrollTop = center.y + margin - height
-  }
-}
+//   if (center.y < top + margin) {
+//     this.wrap.scrollTop = center.y - margin
+//   } else if (center.y > bottom - margin) {
+//     this.wrap.scrollTop = center.y + margin - height
+//   }
+// }
 
-// DOMDisplay.clear()
-// Clears the displayed level, for gameplay advancement or resetting.
-DOMDisplay.prototype.clear = function() {
-  this.wrap.parentNode.removeChild(this.wrap)
-}
+// // DOMDisplay.clear()
+// // Clears the displayed level, for gameplay advancement or resetting.
+// DOMDisplay.prototype.clear = function() {
+//   this.wrap.parentNode.removeChild(this.wrap)
+// }
 
 // Level.obstacleAt()
 // Collision detection
@@ -370,7 +373,7 @@ Level.prototype.playerTouched = function(type, actor) {
   }
 }
 
-var arrowCodes = {37: "left", 38: "up", 39: "right"}
+var arrowCodes = {37: "left", 65: "left", 38: "up", 87: "up", 39: "right", 68: "right"}
 
 function runAnimation(frameFunc) {
   var lastTime = null

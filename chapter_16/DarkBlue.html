@@ -8,16 +8,14 @@
   <script src="DarkBlue.js"></script>
 </head
 ><body>
-  <audio autoplay loop src="http://soundimage.org/wp-content/uploads/2016/01/Lost-Jungle_Looping.mp3"></audio>
+  <audio id="audioLoop" autoplay loop src="http://soundimage.org/wp-content/uploads/2016/01/Lost-Jungle_Looping.mp3"></audio>
   <script>
     runGame(GAME_LEVELS, CanvasDisplay)
-    while (document.body.hasOwnProperty("vsc-initialized")) {
-      let audioLoop = document.createElement("audio")
-      let audioLoopEl = document.createElement("audioLoopEl")
-      let audioLoopElEl = document.getElementById('audioLoop')
-      audioLoop.currentTime = 0
-      audioLoop.autoplay = true
-    }
+    let audioLoop = document.createElement("audio")
+    let aEl = document.createElement("audioLoopEl")
+    let audioLoopEl = document.getElementById('audioLoop')
+    audioLoop.currentTime = 0
+    audioLoop.autoplay = true
   </script>
 </body>
 </html>
