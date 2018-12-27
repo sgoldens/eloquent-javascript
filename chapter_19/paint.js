@@ -106,4 +106,26 @@ tools.Erase = (event, cx) => {
   })
 }
 
+controls.color = cx => {
+  let input = elt("input", {type: "color"})
+  input.addEventListener("change", () => {
+    cx.fillStyle = input.value
+    cx.strokeStyle = input.value
+  })
+  return elt("span", null, "Color: ", input)
+}
+
+controls.brushSize = cx => {
+  let select = elt("select")
+  let sizes = [1, 2, 3, 5, 8, 12, 25, 35, 50, 75, 100]
+  sizes.forEach(size => {
+    select.appendChild(elt("option", {value: size},
+                           `${size} pixels`))
+  })
+  select.addEventListener("change", () => {
+    cx.lineWidth = select.value
+  })
+  return elt("span", null, "Brush size: ", select)
+}
+
 createPaint(document.body)
