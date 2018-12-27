@@ -479,7 +479,6 @@ function flipHorizontally(context, around) {
 function CanvasDisplay(parent, level) {
   this.canvas = document.createElement("canvas")
   this.scoreboard = elt("div", "scoreboard")
-  this.scoreboard.textContent = "Coins Left"
   this.coinsLeft = elt("span", "scoreboard-inner-text")
   this.canvas.width = Math.min(450, level.width * scale)
   this.canvas.height = Math.min(338, level.height * scale)
