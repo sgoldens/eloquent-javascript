@@ -18,10 +18,10 @@ html {
 .coin   { background: rgb(241, 229, 89)}
 .player   { background: rgb(64, 64, 64)}
 
-.lost .player {
+.lost .canvas {
   background: rgb(160, 64, 64);
 }
-.won .player {
+.won .canvas {
   box-shadow: -4px -7px 8px #ffffff, 4px -7px 8px #ffffff;
 }
 
@@ -40,6 +40,7 @@ canvas {
   position: relative;
   height: 0px;
   display: flex;
+  top: 10px;
 }
 
 .scoreboard-inner-text {

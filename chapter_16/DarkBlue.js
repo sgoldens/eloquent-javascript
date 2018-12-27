@@ -2,11 +2,12 @@
 
 let totalCoins
 
-function Level(plan) {
+function Level(plan, n) {
   this.width = plan[0].length
   this.height = plan.length
   this.grid = []
   this.actors = []
+  this.gameLevel = n
 
   for (var y = 0; y < this.height; y++) {
     var line = plan[y], gridLine = []
@@ -406,7 +407,7 @@ function runLevel(level, Display, andThen) {
 
 function runGame(plans, Display) {
   function startLevel(n) {
-    runLevel(new Level(plans[n]), Display, function(status) {
+    runLevel(new Level(plans[n], n), Display, function(status) {
       if (status == "lost")
         startLevel(n)
       else if (n < plans.length - 1)
@@ -488,6 +489,7 @@ function CanvasDisplay(parent, level) {
   this.cx = this.canvas.getContext("2d")
 
   this.level = level
+
   this.animationTime = 0
   this.flipPlayer = false
 
@@ -503,6 +505,7 @@ function CanvasDisplay(parent, level) {
 
 CanvasDisplay.prototype.clear = function() {
   this.canvas.parentNode.removeChild(this.canvas)
+  this.scoreboard.parentNode.removeChild(this.scoreboard)
 }
 
 CanvasDisplay.prototype.drawFrame = function(step) {
@@ -526,7 +529,7 @@ CanvasDisplay.prototype.updateViewport = function() {
   let scoreboardCoins = document.getElementsByClassName("scoreboard-inner-text")
   let difference = (a, b) => { return Math.abs(a - b) }
   if (scoreboardCoins[0]) {
-    scoreboardCoins[0].textContent = `Coins: ${difference(totalCoins , coinsLeft)}/${totalCoins}`
+    scoreboardCoins[0].textContent = `Level: ${this.level.gameLevel + 1} | Coins: ${difference(totalCoins , coinsLeft)}/${totalCoins}`
   }
 
   if (center.x - 10 < view.left + margin)

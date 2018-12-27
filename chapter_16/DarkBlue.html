@@ -6,8 +6,18 @@
   <link rel="stylesheet" type="text/css" href="DarkBlue.css">
   <script src="game_levels.js"></script>
   <script src="DarkBlue.js"></script>
-</head>
-<body>
-  <script>runGame(GAME_LEVELS, CanvasDisplay)</script>
+</head
+><body>
+  <audio autoplay src="http://soundimage.org/wp-content/uploads/2016/01/Lost-Jungle_Looping.mp3"></audio>
+  <script>
+    runGame(GAME_LEVELS, CanvasDisplay)
+    if (runGame) {
+      let audioLoop = document.createElement("audio")
+      let audioLoopEl = document.createElement("audioLoopEl")
+      let audioLoopElEl = document.getElementById('audioLoop')
+      audioLoop.currentTime = 0
+      audioLoop.autoplay = true
+    }
+  </script>
 </body>
 </html>
