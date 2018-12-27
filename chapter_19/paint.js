@@ -128,4 +128,82 @@ controls.brushSize = cx => {
   return elt("span", null, "Brush size: ", select)
 }
 
+loadImageURL = (cx, url) => {
+  let image = document.createElement("img")
+  image.addEventListener("load", () => {
+    let color = cx.fillStyle, size = cx.lineWidth
+    cx.canvas.width = image.width
+    cx.canvas.height = image.height
+    cx.drawImage(image, 0, 0)
+    cx.fillStyle = color
+    cx.strokeStyle = color
+    cx.lineWidth = size
+  })
+  image.src = url
+}
+
+controls.openFile = cx => {
+  let input = elt("input", {type: "file"})
+  input.addEventListener("change", () => {
+    if (input.files.length == 0) { return }
+      let reader = new FileReader()
+      reader.addEventListener("load", () => {
+        loadImageURL(cx, reader.result)
+      })
+      reader.readAsDataURL(input.files[0])
+  })
+  return elt("div", null, "Open file: ", input)
+}
+
+controls.openURL = cx => {
+  let input = elt("input", {type: "text"})
+  let form = elt("form", null,
+                 "Open URL: ", input,
+                elt("button", {type: "submit"}, "load"))
+  form.addEventListener("submit", event => {
+    event.preventDefault()
+    loadImageURL(cx, form.querySelector("input").value)
+  })
+  return form
+}
+
+tools.Text = (event, cx) => {
+  let text = prompt("Text: ", "")
+  if (text) {
+    let pos = relativePos(event, cx.canvas)
+    cx.font = Math.max(7, cx.lineWidth) + "px sans-serif"
+    cx.fillText(text, pos.x, pos.y)
+  }
+}
+
+tools.Spray = (event, cx) => {
+  let radius = cx.lineWidth / 2
+  let area = radius * radius * Math.PI
+  let dotsPerTick = Math.ceil(area / 30)
+
+  let currentPos = relativePost(event, cx.canvas)
+  let spray = setInterval(() => {
+    for (let i = 0; i < dotsPerTick; i++) {
+      let offset = randomPointInRaidus(radius)
+      cx.fillRect(currentPos.x + offset.x,
+                  currentPos.y + offset.y, 1, 1)
+    }
+  }, 25)
+  trackDrag(event => {
+    currentPos = relativePos(event, cx.canvas)
+  }, () => {
+    clearInterval(spray)
+  })
+}
+
+randomPointInRaidus = radius => {
+  for (;;) {
+    let x = Math.random() * 2 - 1
+    let y = Math.random() * 2 - 1
+    if (x * x + y * y <= 1) {
+      return {x: x * radius, y: y * radius}
+    }
+  }
+}
+
 createPaint(document.body)
