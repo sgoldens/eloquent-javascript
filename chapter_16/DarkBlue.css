@@ -46,7 +46,7 @@ canvas {
 .scoreboard-inner-text {
   position: absolute;
   font-size: 23px;
-  color: yellow;
+  color: yellow !important;
   width: 100%;
   text-align: center;
 
