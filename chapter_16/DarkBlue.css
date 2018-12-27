@@ -2,6 +2,10 @@ html, body {
   margin: 0 auto;
 }
 
+html {
+  background-color: #000000;
+}
+
 .background {
   background: rgb(52, 166, 251);
   border-spacing: 0 !important;

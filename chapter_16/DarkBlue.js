@@ -516,10 +516,10 @@ CanvasDisplay.prototype.updateViewport = function() {
   newViewLeft  = this.viewport.left
   newViewTop = this.viewport.top
 
-  if (center.x < view.left + margin)
-    view.left = Math.max(center.x - margin, 0)
-  else if (center.x > view.left + view.width - margin)
-    view.left = Math.min(center.x + margin - view.width,
+  if (center.x - 10 < view.left + margin)
+    view.left = Math.max(center.x - 3 - margin, 0)
+  else if (center.x - 10> view.left + view.width - margin)
+    view.left = Math.min(center.x - 10 + margin - view.width,
                          this.level.width - view.width)
   if (center.y < view.top + margin)
     view.top = Math.max(center.y - margin, 0)
