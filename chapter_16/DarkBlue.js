@@ -600,7 +600,7 @@ CanvasDisplay.prototype.drawActors = function() {
     if (actor.type == "player") {
       this.drawPlayer(x, y, width, height)
     } else {
-      var tileX = (actor.type == "coin" ? 2 : 0) * scale
+      var tileX = (actor.type == "coin" ? 2 : 1) * scale
       this.cx.drawImage(otherSprites,
                         tileX, 0, width, height,
                         x,     y, width, height)
