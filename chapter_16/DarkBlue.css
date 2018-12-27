@@ -25,6 +25,16 @@ html {
   box-shadow: -4px -7px 8px #ffffff, 4px -7px 8px #ffffff;
 }
 
+.winner {
+  font-size: -webkit-xxx-large;
+  position: absolute;
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  color: white;
+  text-align: center;
+  top: 50px;
+}
+
 .game {
   overflow: hidden;
   position: relative;

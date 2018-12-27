@@ -1,4 +1,4 @@
-// Notes taken from readings of "Eloquent JavaScript, Second Edition", by Marijn Haverbeke, Chapter 15, "Project: A Platform Game"
+// Notes and code adapted from "Eloquent JavaScript, Second Edition", by Marijn Haverbeke, Chapter 15, "Project: A Platform Game"
 
 let totalCoins
 
@@ -415,8 +415,12 @@ function runGame(plans, Display) {
         startLevel(n)
       else if (n < plans.length - 1)
         startLevel(n + 1)
-      else
-        console.log("You win!")
+      else {
+        let winner = document.createElement("div")
+        winner.className = "winner"
+        winner.textContent = "You win!"
+        document.body.appendChild(winner)
+      }
     })
   }
   startLevel(0)
